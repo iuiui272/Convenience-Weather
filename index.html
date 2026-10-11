@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Quorum · Weather</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Weather that cross-checks every forecast model and shows you the best estimate. Works offline.">
+<meta name="theme-color" content="#071433">
+<meta name="color-scheme" content="dark light">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Quorum">
+<meta name="format-detection" content="telephone=no">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="apple-touch-startup-image" href="splash/launch-1290x2796.png" media="(device-width: 430px) and (device-height: 932px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)">
+<link rel="apple-touch-startup-image" href="splash/launch-1179x2556.png" media="(device-width: 393px) and (device-height: 852px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)">
+<link rel="apple-touch-startup-image" href="splash/launch-1284x2778.png" media="(device-width: 428px) and (device-height: 926px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)">
+<link rel="apple-touch-startup-image" href="splash/launch-1170x2532.png" media="(device-width: 390px) and (device-height: 844px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)">
+<link rel="apple-touch-startup-image" href="splash/launch-1125x2436.png" media="(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)">
+<link rel="apple-touch-startup-image" href="splash/launch-828x1792.png" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)">
+<link rel="apple-touch-startup-image" href="splash/launch-750x1334.png" media="(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)">
+<link rel="apple-touch-startup-image" href="splash/launch-1668x2388.png" media="(device-width: 834px) and (device-height: 1194px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)">
+<link rel="apple-touch-startup-image" href="splash/launch-2048x2732.png" media="(device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)">
+<link rel="apple-touch-startup-image" href="splash/launch-1640x2360.png" media="(device-width: 820px) and (device-height: 1180px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)">
+<link rel="apple-touch-startup-image" href="splash/launch-1620x2160.png" media="(device-width: 810px) and (device-height: 1080px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)">
+<link rel="apple-touch-startup-image" href="splash/launch-1488x2266.png" media="(device-width: 744px) and (device-height: 1133px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)">
+<link rel="stylesheet" href="css/styles.css">
+<style>html{background:#071433}</style>
+</head>
+<body>
+<div id="bgA" class="bg"></div><div id="bgB" class="bg"></div><canvas id="fx" aria-hidden="true"></canvas>
+
+<div id="app">
+  <!-- City list: docked sidebar on iPad, full-screen sheet on iPhone -->
+  <aside id="sidebar" aria-label="Cities">
+    <header class="lhead">
+      <h2>Weather</h2>
+      <div class="lact">
+        <button class="ib wide-only" data-open="radar" aria-label="Rain radar"><svg class="li" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 4L3 6v14l6-2 6 2 6-2V4l-6 2zM9 4v14M15 6v14"/></svg></button>
+        <button class="ib" data-open="compare" aria-label="Compare"><svg class="li" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4v16M17 4v16M3 8l4-4 4 4M13 16l4 4 4-4"/></svg></button>
+        <button class="ib" data-open="settings" aria-label="Settings"><svg class="li" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg></button>
+        <button class="tb" id="btnEdit" data-act="edit">Edit</button>
+        <button class="tb narrow-only" data-act="list-close">Done</button>
+      </div>
+    </header>
+    <div class="lsearch">
+      <svg class="li" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+      <input id="q" type="search" inputmode="search" enterkeyhint="search" placeholder="Search for a city" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="Search for a city">
+      <button class="ib sm" data-act="locate" aria-label="Use my location"><svg class="li" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l18-8-8 18-2-8z"/></svg></button>
+    </div>
+    <div id="results"></div>
+    <div id="clist"></div>
+  </aside>
+
+  <main id="stage">
+    <div id="pager"></div>
+
+    <section id="empty" hidden>
+      <div class="ebox">
+        <svg class="elogo" viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="30" fill="none" stroke="rgba(255,255,255,.25)" stroke-width="2"/><g fill="#5ac8fa"><circle cx="20" cy="34" r="4"/></g><g fill="#30d158"><circle cx="30" cy="30" r="4"/></g><g fill="#ff9f0a"><circle cx="38" cy="33" r="4"/></g><g fill="#bf5af2"><circle cx="45" cy="29" r="4"/></g><path d="M32 12l5 8-5 8-5-8z" fill="#fff"/></svg>
+        <h1>Quorum</h1>
+        <p>Every forecast model, cross-checked. One best temperature you can trust.</p>
+        <button class="btn primary" data-act="locate"><svg class="li" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l18-8-8 18-2-8z"/></svg><span>Use my location</span></button>
+        <button class="btn" data-act="focus-search"><span>Search for a city</span></button>
+        <small>No account. No tracking. Works offline once loaded.</small>
+      </div>
+    </section>
+
+    <nav id="bar" aria-label="Weather navigation">
+      <button class="ib" data-open="radar" aria-label="Rain radar"><svg class="li" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 4L3 6v14l6-2 6 2 6-2V4l-6 2zM9 4v14M15 6v14"/></svg></button>
+      <div id="dots" role="tablist"></div>
+      <button class="ib" data-act="list" aria-label="Cities"><svg class="li" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6h13M8 12h13M8 18h13M3.5 6h.01M3.5 12h.01M3.5 18h.01"/></svg></button>
+    </nav>
+  </main>
+</div>
+
+<!-- Sheets -->
+<div class="sheet" id="sheet-settings" hidden role="dialog" aria-modal="true" aria-label="Settings">
+  <div class="backdrop" data-close="settings"></div>
+  <div class="scard"><header class="shead2"><h2>Settings</h2><button class="tb" data-close="settings">Done</button></header><div class="sbody" id="settingsBody"></div></div>
+</div>
+
+<div class="sheet" id="sheet-compare" hidden role="dialog" aria-modal="true" aria-label="Compare">
+  <div class="backdrop" data-close="compare"></div>
+  <div class="scard"><header class="shead2"><h2>Compare</h2><button class="tb" data-close="compare">Done</button></header><div class="sbody" id="compareBody"></div></div>
+</div>
+
+<div class="sheet full" id="sheet-radar" hidden role="dialog" aria-modal="true" aria-label="Rain radar">
+  <div class="backdrop" data-close="radar"></div>
+  <div class="scard"><header class="shead2"><h2>Rain radar</h2><button class="tb" data-close="radar">Done</button></header>
+    <div class="sbody nopad">
+      <div class="rwrap"><div id="radarMap"></div>
+        <div class="rzoom"><button class="ib" data-act="r-zoom" data-v="1" aria-label="Zoom in">+</button><button class="ib" data-act="r-zoom" data-v="-1" aria-label="Zoom out">−</button>
+          <button class="ib" data-act="r-center" aria-label="Centre on city"><svg class="li" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l18-8-8 18-2-8z"/></svg></button></div>
+        <div class="rctl"><button class="ib play" id="rplay" data-act="r-play" aria-pressed="false" aria-label="Play or pause"><svg class="pl" viewBox="0 0 24 24" width="22" height="22"><path d="M7 4l13 8-13 8z" fill="currentColor"/></svg><svg class="pa" viewBox="0 0 24 24" width="22" height="22"><path d="M6 4h4v16H6zM14 4h4v16h-4z" fill="currentColor"/></svg></button>
+          <input type="range" id="rslider" min="0" max="0" value="0" aria-label="Radar time"><span id="rtime">–</span></div>
+        <p class="attr">Radar: RainViewer · Map © OpenStreetMap contributors © CARTO</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="glance" hidden aria-live="polite"></div>
+<div id="toast" role="status"></div>
+
+<noscript><p style="color:#fff;padding:24px;font:16px system-ui">Quorum needs JavaScript to show your forecast.</p></noscript>
+<script type="module" src="js/app.js"></script>
+</body>
+</html>
